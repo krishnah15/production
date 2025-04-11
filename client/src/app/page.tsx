@@ -1,8 +1,10 @@
 "use client";
 import { useRef, useState } from "react";
 import '../../styles/page.css';
+
 const VideoRecorder = () => {
   const [recording, setRecording] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [videoURL, setVideoURL] = useState<string | null>(null);
   const [uploadURL, setUploadURL] = useState<string | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -14,10 +16,11 @@ const VideoRecorder = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
       mediaRecorderRef.current = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp9" });
+
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           recordedChunksRef.current.push(event.data);
-        }else{
+        } else {
           console.error("No data available");
         }
       };
@@ -31,6 +34,7 @@ const VideoRecorder = () => {
 
       mediaRecorderRef.current.start();
       setRecording(true);
+      setPaused(false);
     } catch (error) {
       console.error("Error accessing camera:", error);
     }
@@ -41,47 +45,61 @@ const VideoRecorder = () => {
       mediaRecorderRef.current.stop();
     }
     setRecording(false);
+    setPaused(false);
+  };
+
+  const pauseRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
+      mediaRecorderRef.current.pause();
+      setPaused(true);
+    }
+  };
+
+  const resumeRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === "paused") {
+      mediaRecorderRef.current.resume();
+      setPaused(false);
+    }
   };
 
   const uploadVideo = async (blob: Blob) => {
     const formData = new FormData();
-    formData.append("file", blob, "uploaded.mp4");
+    formData.append("file", blob, "deviceid.mp4");
 
     try {
-        const response = await fetch("http://localhost:8000/upload/", {
-            method: "POST",
-            body: formData,
-        });
+      const response = await fetch("http://localhost:8000/upload/", {
+        method: "POST",
+        body: formData,
+      });
 
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-        const data = await response.json();
-        setUploadURL(data.url);
-        console.log("Uploaded Video URL:", data.url);
+      const data = await response.json();
+      setUploadURL(data.url);
+      console.log("Uploaded Video URL:", data.url);
     } catch (error) {
-        console.error("Error uploading video:", error);
+      console.error("Error uploading video:", error);
     }
   };
 
   return (
     <div style={{ height: "90%" }} className="videoContainer">
 
-      <div className="mt-4">
-        {recording ? (
-          <button onClick={stopRecording} className="stopBtn">Stop Recording</button>
-        ) : (
+      <div className="buttonContainer">
+        {!recording ? (
           <button onClick={startRecording} className="startBtn">Start Recording</button>
+        ) : (
+          <>
+            {!paused ? (
+              <button onClick={pauseRecording} className="pauseBtn">Pause</button>
+            ) : (
+              <button onClick={resumeRecording} className="resumeBtn">Resume</button>
+            )}
+            <button onClick={stopRecording} className="stopBtn">Stop Recording</button>
+          </>
         )}
       </div>
 
-      {/* {videoURL && (
-        <div className="recordedVideoContainer">
-          <h3 className="recordedVideoTitle">Recorded Video:</h3>
-          <video src={videoURL} controls className="w-full max-w-md border rounded"></video>
-        </div>
-      )} */}
-
-      
       {uploadURL && (
         <div className="linkContainer">
           <h3 className="text-sm font-semibold">Uploaded Video:</h3>

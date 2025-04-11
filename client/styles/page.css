@@ -35,6 +35,41 @@
     background-color: darkgreen;
 }
 
+.pauseBtn{
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    border: none;
+    margin-right: auto;
+    margin-bottom: 1em;
+}
+
+.resumeBtn{
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    border: none;
+    margin-right: auto;
+    margin-bottom: 1em;
+}
+.resumeBtn:hover{
+    background-color: darkgreen;
+}
+.pauseBtn:hover{
+    background-color: darkgreen;
+}
+
+.buttonContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
 .recordedVideoContainer{
     margin-top: 1em;
     margin-bottom: 1em;
