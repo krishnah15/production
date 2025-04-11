@@ -1,0 +1,54 @@
+.videoContainer{
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+  
+.startBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    border: none;
+    margin-bottom: 1em;
+}
+.startBtn:hover{
+    background-color: darkgreen;
+}
+
+.stopBtn{
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    border: none;
+    margin-bottom: 1em;
+}
+.stopBtn:hover{
+    background-color: darkgreen;
+}
+
+.recordedVideoContainer{
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
+
+.linkContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}

@@ -3,6 +3,9 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 import os
 from dotenv import load_dotenv
+from fastapi.middleware.cors import CORSMiddleware
+from flask_cors import CORS
+
 
 load_dotenv()
 
@@ -11,6 +14,14 @@ AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
 AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 AWS_REGION = os.getenv("AWS_REGION")
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 s3_client = boto3.client(
     "s3",
@@ -24,12 +35,11 @@ async def list_buckets():
         response = s3_client.list_buckets()
         bucket_names = [bucket["Name"] for bucket in response["Buckets"]]
 
-        objects = s3_client.list_objects_v2(Bucket="oizom-admin-app")
+        objects = s3_client.list_objects_v2(Bucket="device-allocation")
         file_list = [obj["Key"] for obj in objects.get("Contents", [])]
 
         print("file_list",file_list)
-        print("bucket_names",bucket_names)
-        return {"buckets": bucket_names}
+        return {"buckets": bucket_names, "files": file_list}
     except Exception as e:
         return {"error": str(e)}
 
@@ -61,15 +71,19 @@ async def debug_bucket():
     except Exception as e:
         return {"error": str(e)}
 
-# @app.post("/upload/")
-# async def upload_video(file: UploadFile = File(...)):
-#     try:
-#         file_key = f"videos/{file.filename}"
-#         s3_client.upload_fileobj(file.file, AWS_BUCKET_NAME, file_key, ExtraArgs={"ACL": "public-read"})
+@app.post("/upload/")
+async def upload_video(file: UploadFile = File(...)):
+    try:
+        file_key = f"links/{file.filename}"
+        
+        s3_client.upload_fileobj(file.file, AWS_BUCKET_NAME, file_key, ExtraArgs={"ACL": "public-read"})
 
-#         s3_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
-#         return {"url": s3_url}
+        s3_url = f"https://{AWS_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{file_key}"
+        
+        return {"url": s3_url}
 
-#     except NoCredentialsError:
-#         return {"error": "AWS credentials not found"}
+    except NoCredentialsError:
+        return {"error": "AWS credentials not found"}
+    except Exception as e:
+        return {"error": str(e)}
 
