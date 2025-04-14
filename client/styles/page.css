@@ -1,76 +1,44 @@
-.videoContainer{
+.videoContainer {
     margin: 10px;
+    padding: 1em;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-width: 100%;
 }
-  
-.startBtn{
+
+.startBtn,
+.stopBtn,
+.pauseBtn,
+.resumeBtn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: green;
+    color: white;
+    border: none;
+    margin-bottom: 1em;
+    min-width: 120px;
+    text-align: center;
+}
+
+.startBtn:hover,
+.stopBtn:hover,
+.pauseBtn:hover,
+.resumeBtn:hover {
+    background-color: darkgreen;
+}
+
+.buttonContainer {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: green;
-    color: white;
-    border: none;
-    margin-bottom: 1em;
-}
-.startBtn:hover{
-    background-color: darkgreen;
-}
-
-.stopBtn{
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: green;
-    color: white;
-    border: none;
-    margin-bottom: 1em;
-}
-.stopBtn:hover{
-    background-color: darkgreen;
-}
-
-.pauseBtn{
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: green;
-    color: white;
-    border: none;
-    margin-right: auto;
-    margin-bottom: 1em;
-}
-
-.resumeBtn{
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: green;
-    color: white;
-    border: none;
-    margin-right: auto;
-    margin-bottom: 1em;
-}
-.resumeBtn:hover{
-    background-color: darkgreen;
-}
-.pauseBtn:hover{
-    background-color: darkgreen;
-}
-
-.buttonContainer{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 1em;
 }
-.recordedVideoContainer{
+
+.recordedVideoContainer,
+.linkContainer {
     margin-top: 1em;
     margin-bottom: 1em;
     display: flex;
@@ -78,12 +46,32 @@
     align-items: center;
     justify-content: center;
     gap: 1em;
+    width: 100%;
 }
 
-.linkContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1em;
+video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .buttonContainer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .startBtn,
+    .stopBtn,
+    .pauseBtn,
+    .resumeBtn {
+        width: 100%;
+    }
+
+    .linkContainer a {
+        width: 100%;
+        text-align: center;
+    }
 }

@@ -64,7 +64,7 @@ const VideoRecorder = () => {
 
   const uploadVideo = async (blob: Blob) => {
     const formData = new FormData();
-    formData.append("file", blob, "deviceid.mp4");
+    formData.append("file", blob, "video.mp4");
 
     try {
       const response = await fetch("http://localhost:8000/upload/", {
