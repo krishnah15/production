@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import '../../styles/page.css';
+import BasicTextFields from "./components/Home";
 
 const VideoRecorder = () => {
   const [recording, setRecording] = useState(false);
@@ -83,8 +84,8 @@ const VideoRecorder = () => {
   };
 
   return (
-    <div style={{ height: "90%" }} className="videoContainer">
-
+    <div style={{ height: "95%" }} className="videoContainer">
+      <BasicTextFields />
       <div className="buttonContainer">
         {!recording ? (
           <button onClick={startRecording} className="startBtn">Start Recording</button>
